@@ -1,0 +1,361 @@
+package fr.xjet.tweetyhunting;
+
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.CardView;
+import android.util.Log;
+import android.util.Pair;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import com.crashlytics.android.Crashlytics;
+import com.gc.materialdesign.views.ButtonFloat;
+import com.rengwuxian.materialedittext.MaterialEditText;
+import com.squareup.okhttp.OkHttpClient;
+
+import io.fabric.sdk.android.Fabric;
+import java.io.IOException;
+import java.util.List;
+
+import fr.xjet.tweetyhunting.network.CatApiManager;
+import fr.xjet.tweetyhunting.network.NetworkListener;
+import fr.xjet.tweetyhunting.twitter.TwitterManager;
+import fr.xjet.tweetyhunting.twitter.TwitterUpdateTask;
+import fr.xjet.tweetyhunting.view.CustomProgressBarCircularIndeterminate;
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
+
+
+public class TweetingActivity extends ActionBarActivity implements NetworkListener, TwitterManager.TwitterManagerListener, SwipeRefreshLayout.OnRefreshListener {
+
+    private static final String LOG_TAG = "TweetingActivity";
+
+    private static final int ANIMATION_DURATION = 5;
+
+    private OkHttpClient mClient;
+
+    private static TwitterManager mTwitterManager;
+    protected float mDensity;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CustomProgressBarCircularIndeterminate mLoader;
+    private GifImageView mImageView;
+    private CardView mCardView;
+    private StateButtonManager mStateButtonManager;
+    private ButtonFloat mShareButton;
+    private CustomProgressBarCircularIndeterminate mShareButtonLoader;
+    private MaterialEditText mTweetEditText;
+
+    private Cat mCurrentCat;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+        setContentView(R.layout.activity_tweeting);
+
+        Log.d(LOG_TAG, "onCreate");
+
+        mDensity  = getResources().getDisplayMetrics().density;
+        mClient = new OkHttpClient();
+
+        mImageView = (GifImageView) findViewById(R.id.catImageView);
+        mLoader = (CustomProgressBarCircularIndeterminate) findViewById(R.id.progressBar);
+        mShareButton = (ButtonFloat) findViewById(R.id.shareButton);
+        mShareButtonLoader = (CustomProgressBarCircularIndeterminate) findViewById(R.id.stateButtonLoader);
+        mCardView = (CardView) findViewById(R.id.tweet_card);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        mTweetEditText = (MaterialEditText) findViewById(R.id.tweetEditText);
+
+        mTweetEditText.setMaxCharacters(140 - getString(R.string.tweet_sufix).length() -2);
+
+        new LoaderManager(mLoader, mImageView);
+        mStateButtonManager = new StateButtonManager(this, mShareButtonLoader,mShareButton);
+
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        getACat();
+
+        mTwitterManager = new TwitterManager(this.getApplicationContext(), this);
+
+
+        mShareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // close keyboard
+                InputMethodManager imm = (InputMethodManager)getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mTweetEditText.getWindowToken(), 0);
+
+                requestTweetCat();
+            }
+        });
+    }
+
+    @Override
+    protected void onNewIntent (Intent intent){
+
+        Log.d(LOG_TAG, "onNewIntent");
+
+        // Check if coming from Browser
+        if(intent != null &&
+                intent.getData() != null &&
+                intent.getData().toString().startsWith(Constant.CALLBACK_URL) ){
+
+            Log.d(LOG_TAG,"Coming from browser, last image : " + mCurrentCat.getUrl());
+            Toast.makeText(this, getString(R.string.twitter_sharingimage), Toast.LENGTH_SHORT).show();
+            mStateButtonManager.showLoader();
+        }
+
+        // maybe handle intent if callbacked from Twitter
+        mTwitterManager.handleOAuthCallback(intent);
+        /**
+         * see {@link #onConnect()}
+         */
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.menu_tweeting, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void getACat(){
+        mClient.setFollowRedirects(false);
+
+        new CatApiManager(this).getACat();
+    }
+
+    /**
+     * Tweet current cat, if possible
+     */
+    private void requestTweetCat(){
+        if(mCurrentCat.isEmpty()){
+            Toast.makeText(
+                    TweetingActivity.this, getString(R.string.msg_nocat),
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(mTwitterManager.isConnected()){
+            mStateButtonManager.showLoader();
+
+            String tweetText =
+                    mTweetEditText.getText().toString() +
+                    " " +
+                    getString(R.string.tweet_sufix);
+
+            mTwitterManager.shareTweet(new Pair<>(tweetText, mCurrentCat), new TwitterUpdateTask.OnUpdateTwitter() {
+                @Override
+                public void onSuccess() {
+                    mTweetEditText.setText("");
+                    mStateButtonManager.hideLoader();
+                    slideOutView(mCardView);
+                }
+
+                @Override
+                public void onFail() {
+                    mStateButtonManager.hideLoader();
+                    // Manage in TwitterManager
+                }
+            });
+        } else {
+            mTwitterManager.askOAuth();
+            mStateButtonManager.hideLoader();
+        }
+    }
+
+    // NetworkListener Implementation
+
+    @Override
+    public void catReceived(Cat cat) {
+        Log.d(LOG_TAG, "final cat : " + cat.getUrl());
+
+        mSwipeRefreshLayout.setRefreshing(false);
+
+        if(cat.getImageData() != null){
+            mCurrentCat = cat;
+
+            LoaderManager.hideLoader();
+
+            GifDrawable gifFromStream = null;
+            try {
+                gifFromStream = new GifDrawable(cat.getImageData());
+                mImageView.setImageDrawable(gifFromStream);
+
+                mImageView.getLayoutParams().width = ((ViewGroup)mImageView.getParent()).getWidth();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                Toast.makeText(this, getString(R.string.msg_error), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, getString(R.string.msg_error), Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    @Override
+    public void catFetchFailed(NetworkError e) {
+
+        mSwipeRefreshLayout.setRefreshing(false);
+
+        switch (e){
+            case APIFAIL:
+                Toast.makeText(this, getString(R.string.msg_error_api), Toast.LENGTH_SHORT).show();
+                break;
+            case NETWORKFAIL:
+                Toast.makeText(this, getString(R.string.msg_error_network), Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private void slideOutView(View view){
+
+        AnimatorSet animatorSet = new AnimatorSet();
+
+        AnimatorSet slideOut = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.slide_out);
+        slideOut.setTarget(mCardView);
+        AnimatorSet popIn = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.pop_in);
+        popIn.setTarget(mCardView);
+
+        ObjectAnimator alphaOutAnimation = ObjectAnimator.ofFloat(mImageView, View.ALPHA, 1, 0);
+        alphaOutAnimation.setDuration(0);
+        alphaOutAnimation.setTarget(mImageView);
+        AnimatorSet popInLoader = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.pop_in);
+        popInLoader.setTarget(mLoader);
+
+        animatorSet.playSequentially(slideOut, popIn);
+        animatorSet.play(popIn).with(alphaOutAnimation).with(popInLoader);
+//        animatorSet.play(slideOut);
+        animatorSet.start();
+
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                getACat();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+
+
+    }
+
+
+    // Implement SwipeRefreshLayout.OnRefreshListener
+
+    @Override
+    public void onRefresh() {
+        getACat();
+    }
+
+
+    // Implement TwitterManagerListener;
+
+    @Override
+    public void onConnect() {
+        Log.d(LOG_TAG, "onConnect");
+
+        if(!mCurrentCat.isEmpty()){
+            requestTweetCat();
+        }
+    }
+
+    @Override
+    public void onDisconnect() {
+        Log.d(LOG_TAG, "onDisconnect");
+
+    }
+
+    @Override
+    public void onFail() {
+        Log.d(LOG_TAG, "onFail");
+
+    }
+
+
+
+
+    /***************
+     * UNUSED
+     ***************/
+
+    private void sendShareTwit(Cat cat) {
+
+        Intent tweetIntent = new Intent(Intent.ACTION_SEND);
+
+        tweetIntent.setType("image/gif");
+        tweetIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_name));
+        tweetIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(ImageUtils.saveImage(this, cat)));
+
+        PackageManager packManager = getPackageManager();
+        List<ResolveInfo> resolvedInfoList = packManager.queryIntentActivities(tweetIntent,  PackageManager.MATCH_DEFAULT_ONLY);
+
+        boolean resolved = false;
+        for(ResolveInfo resolveInfo: resolvedInfoList){
+            if(resolveInfo.activityInfo.packageName.startsWith("com.twitter.android")){
+                tweetIntent.setClassName(
+                        resolveInfo.activityInfo.packageName,
+                        resolveInfo.activityInfo.name );
+                resolved = true;
+                break;
+            }
+        }
+
+
+        if(resolved){
+            startActivity(tweetIntent);
+        }else{
+            startActivity(Intent.createChooser(tweetIntent, getString(R.string.dialog_share)));
+        }
+    }
+
+}

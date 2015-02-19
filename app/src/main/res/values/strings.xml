@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TweetyHunting</string>
+    <string name="tweet_sufix">#tweetyhunting</string>
+
+    <string name="hint_tweet">The tweet message</string>
+
+    <string name="action_settings">Settings</string>
+
+
+    <string name="msg_error">Error while getting a new image, try again</string>
+    <string name="msg_error_network">No Internet connection</string>
+    <string name="msg_error_api">Unable to communicate with thecatapi.com</string>
+    <string name="msg_nocat">No cat to tweet !</string>
+    <string name="dialog_share">Share image on</string>
+
+    <string name="invalid_credentials">Unable to get correct autorisation from Twitter API. Plz reauthorize the app. </string>
+    <string name="unknown_error">Unknown error</string>
+
+
+
+    <string name="twitter_requestacess">Authorize %1$s to post image on Twitter</string>
+    <string name="twitter_requestacess_fail">Fail to authorize this app on your Twitter account</string>
+    <string name="twitter_requestacess_fail_accesstoken">Fail to authorize this app on your Twitter account (access token)</string>
+    <string name="twitter_sharingimage">Sharing image...</string>
+
+
+</resources>
