@@ -27,7 +27,6 @@ import com.gc.materialdesign.views.ButtonFloat;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.okhttp.OkHttpClient;
 
-import io.fabric.sdk.android.Fabric;
 import java.io.IOException;
 import java.util.List;
 
@@ -36,6 +35,7 @@ import fr.xjet.tweetyhunting.network.NetworkListener;
 import fr.xjet.tweetyhunting.twitter.TwitterManager;
 import fr.xjet.tweetyhunting.twitter.TwitterUpdateTask;
 import fr.xjet.tweetyhunting.view.CustomProgressBarCircularIndeterminate;
+import io.fabric.sdk.android.Fabric;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -65,7 +65,10 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Fabric.with(this, new Crashlytics());
+        ((TweetyHuntingApplication)getApplication()).sendScreenTracking(LOG_TAG);
+
         setContentView(R.layout.activity_tweeting);
 
         Log.d(LOG_TAG, "onCreate");
@@ -152,6 +155,13 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     }
 
     private void getACat(){
+
+        // send tracking event
+        ((TweetyHuntingApplication)getApplication()).sendEventTracking(
+                R.string.tracker_tweetingactivity,
+                R.string.tracker_tweetingactivity_getcat,
+                "");
+
         mClient.setFollowRedirects(false);
 
         new CatApiManager(this).getACat();
@@ -170,6 +180,13 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
 
         if(mTwitterManager.isConnected()){
             mStateButtonManager.showLoader();
+
+
+            // send tracking event
+            ((TweetyHuntingApplication)getApplication()).sendEventTracking(
+                    R.string.tracker_tweetingactivity,
+                    R.string.tracker_tweetingactivity_tweet,
+                    "");
 
             String tweetText =
                     mTweetEditText.getText().toString() +
