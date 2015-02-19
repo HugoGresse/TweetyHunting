@@ -26,4 +26,7 @@
     <string name="twitter_sharingimage">Sharing image...</string>
 
 
+    <string name="tracker_tweetingactivity">TweetingActivty</string>
+    <string name="tracker_tweetingactivity_getcat">Get Cat</string>
+    <string name="tracker_tweetingactivity_tweet">Tweet</string>
 </resources>
