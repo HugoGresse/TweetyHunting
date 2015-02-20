@@ -192,11 +192,13 @@ public class TwitterManager {
     /**
      * Remove Token, Secret from preferences
      */
-    private void disconnectTwitter() {
+    public void disconnectTwitter() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.remove(Constant.PREF_KEY_TOKEN);
         editor.remove(Constant.PREF_KEY_SECRET);
         editor.apply();
+
+        mListener.onDisconnect();
     }
 
     public interface TwitterManagerListener {
