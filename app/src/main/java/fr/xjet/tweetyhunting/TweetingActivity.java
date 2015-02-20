@@ -46,21 +46,23 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
 
     private static final int ANIMATION_DURATION = 5;
 
-    private OkHttpClient mClient;
+    private OkHttpClient                            mClient;
 
-    private static TwitterManager mTwitterManager;
-    protected float mDensity;
+    private TwitterManager                          mTwitterManager;
+    protected float                                 mDensity;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private CustomProgressBarCircularIndeterminate mLoader;
-    private GifImageView mImageView;
-    private CardView mCardView;
-    private StateButtonManager mStateButtonManager;
-    private ButtonFloat mShareButton;
-    private CustomProgressBarCircularIndeterminate mShareButtonLoader;
-    private MaterialEditText mTweetEditText;
+    private SwipeRefreshLayout                      mSwipeRefreshLayout;
+    private CustomProgressBarCircularIndeterminate  mLoader;
+    private GifImageView                            mImageView;
+    private CardView                                mCardView;
+    private StateButtonManager                      mStateButtonManager;
+    private ButtonFloat                             mShareButton;
+    private CustomProgressBarCircularIndeterminate  mShareButtonLoader;
+    private MaterialEditText                        mTweetEditText;
+    private MenuItem                                mTwitterMenuItem;
+    private boolean                                 mRequestTweetCat;
 
-    private Cat mCurrentCat;
+    private Cat                                     mCurrentCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +123,9 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
                 intent.getData().toString().startsWith(Constant.CALLBACK_URL) ){
 
             Log.d(LOG_TAG,"Coming from browser, last image : " + mCurrentCat.getUrl());
-            Toast.makeText(this, getString(R.string.twitter_sharingimage), Toast.LENGTH_SHORT).show();
-            mStateButtonManager.showLoader();
+            if(mRequestTweetCat){
+                Toast.makeText(this, getString(R.string.twitter_sharingimage), Toast.LENGTH_SHORT).show();
+            }
         }
 
         // maybe handle intent if callbacked from Twitter
@@ -135,7 +138,14 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_tweeting, menu);
+        getMenuInflater().inflate(R.menu.menu_tweeting, menu);
+
+        mTwitterMenuItem = menu.findItem(R.id.action_logout_tw);
+
+        if(!mTwitterManager.isConnected()){
+            mTwitterMenuItem.setTitle(getString(R.string.action_tw_login));
+        }
+
         return true;
     }
 
@@ -146,10 +156,19 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_logout_tw:
+                if(mTwitterManager.isConnected()){
+                    mTwitterManager.disconnectTwitter();
+                } else {
+                    mTwitterManager.askOAuth();
+                    mStateButtonManager.hideLoader();
+                }
+                return true;
+            case R.id.action_about:
+                return false;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -178,9 +197,11 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
             return;
         }
 
+        mRequestTweetCat = true;
+
         if(mTwitterManager.isConnected()){
             mStateButtonManager.showLoader();
-
+            mRequestTweetCat = false;
 
             // send tracking event
             ((TweetyHuntingApplication)getApplication()).sendEventTracking(
@@ -321,7 +342,9 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     public void onConnect() {
         Log.d(LOG_TAG, "onConnect");
 
-        if(!mCurrentCat.isEmpty()){
+        mTwitterMenuItem.setTitle(getString(R.string.action_tw_logout));
+
+        if(!mCurrentCat.isEmpty() && mRequestTweetCat){
             requestTweetCat();
         }
     }
@@ -330,6 +353,8 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     public void onDisconnect() {
         Log.d(LOG_TAG, "onDisconnect");
 
+
+        mTwitterMenuItem.setTitle(getString(R.string.action_tw_login));
     }
 
     @Override
