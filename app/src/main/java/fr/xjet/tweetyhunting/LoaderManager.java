@@ -52,4 +52,11 @@ public class LoaderManager {
 
     }
 
+    public static boolean isLoading(){
+        if(sProgressBar != null && sImageView != null && sProgressBar.getAlpha() != 0.0){
+            return true;
+        }
+        return false;
+    }
+
 }
