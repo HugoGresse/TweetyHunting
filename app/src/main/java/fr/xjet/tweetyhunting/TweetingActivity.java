@@ -171,7 +171,7 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
      * Tweet current cat, if possible
      */
     private void requestTweetCat(){
-        if(mCurrentCat.isEmpty()){
+        if(mCurrentCat != null && mCurrentCat.isEmpty() || LoaderManager.isLoading()){
             Toast.makeText(
                     TweetingActivity.this, getString(R.string.msg_nocat),
                     Toast.LENGTH_SHORT).show();
