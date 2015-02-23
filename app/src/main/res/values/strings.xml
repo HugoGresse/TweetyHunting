@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <string name="app_name">TweetyHunting</string>
     <string name="tweet_sufix">#tweetyhunting</string>
@@ -25,10 +25,20 @@
     <string name="twitter_requestacess">Authorize %1$s to post image on Twitter</string>
     <string name="twitter_requestacess_fail">Fail to authorize this app on your Twitter account</string>
     <string name="twitter_requestacess_fail_accesstoken">Fail to authorize this app on your Twitter account (access token)</string>
-    <string name="twitter_sharingimage">Sharing image...</string>
+    <string name="twitter_sharingimage">Sharing image…</string>
 
 
     <string name="tracker_tweetingactivity">TweetingActivty</string>
     <string name="tracker_tweetingactivity_getcat">Get Cat</string>
     <string name="tracker_tweetingactivity_tweet">Tweet</string>
+
+    <string name="about_me">Made with love by Hugo Gresse https://twitter.com/HugoGresse</string>
+    <string name="using">Using</string>
+    <string-array name="about_libraries">
+        <item>Retrofit and Okhttp by Square Up http://square.github.io/retrofit/</item>
+        <item>Twitter4j http://twitter4j.org</item>
+        <item tools:ignore="TypographyDashes">Android Gif Drawable by Karol Wrótniak https://github.com/koral--/android-gif-drawable/</item>
+        <item>MaterialDesignLibrary by Ivan Navas https://github.com/navasmdc/MaterialDesignLibrary</item>
+        <item>Material Edit Text by Kai Zhu https://github.com/rengwuxian/MaterialEditText</item>
+    </string-array>
 </resources>

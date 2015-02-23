@@ -22,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
 import com.gc.materialdesign.views.ButtonFloat;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.okhttp.OkHttpClient;
@@ -35,7 +34,6 @@ import fr.xjet.tweetyhunting.network.NetworkListener;
 import fr.xjet.tweetyhunting.twitter.TwitterManager;
 import fr.xjet.tweetyhunting.twitter.TwitterUpdateTask;
 import fr.xjet.tweetyhunting.view.CustomProgressBarCircularIndeterminate;
-import io.fabric.sdk.android.Fabric;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -68,7 +66,6 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Fabric.with(this, new Crashlytics());
         ((TweetyHuntingApplication)getApplication()).sendScreenTracking(LOG_TAG);
 
         setContentView(R.layout.activity_tweeting);
@@ -166,6 +163,8 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
                 }
                 return true;
             case R.id.action_about:
+                Intent aboutIntent = new Intent(this, AboutActivity.class);
+                this.startActivity(aboutIntent);
                 return false;
         }
 
