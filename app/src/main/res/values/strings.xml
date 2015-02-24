@@ -32,8 +32,9 @@
     <string name="tracker_tweetingactivity_getcat">Get Cat</string>
     <string name="tracker_tweetingactivity_tweet">Tweet</string>
 
-    <string name="about_me">Made with love by Hugo Gresse https://twitter.com/HugoGresse</string>
-    <string name="using">Using</string>
+    <string name="developed_by">Made with love by</string>
+    <string name="about_me">Hugo Gresse https://twitter.com/HugoGresse</string>
+    <string name="using">Third-party libraries</string>
     <string-array name="about_libraries">
         <item>Retrofit and Okhttp by Square Up http://square.github.io/retrofit/</item>
         <item>Twitter4j http://twitter4j.org</item>

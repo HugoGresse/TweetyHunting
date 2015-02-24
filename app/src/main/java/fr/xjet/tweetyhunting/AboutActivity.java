@@ -55,7 +55,7 @@ public class AboutActivity extends Activity {
         ((TextView)headerListView.findViewById(R.id.using_title)).setTypeface(mRobotoCondensedBold);
         mMeTextView = ((TextView)headerListView.findViewById(R.id.me_textview));
         mMeTextView.setTypeface(mRobotoBold);
-        formatCardUrlIntent(mMeTextView, mMeTextView.getText().toString());
+        formatCardUrlIntent(mMeTextView, mMeTextView.getText().toString(), false);
 
         mListView.addHeaderView(headerListView);
         mListView.setAdapter(adapter);
@@ -82,14 +82,14 @@ public class AboutActivity extends Activity {
 
             textView.setTypeface(mRobotoBold);
 
-            formatCardUrlIntent(textView, values[position]);
+            formatCardUrlIntent(textView, values[position], true);
 
             return rowView;
         }
     }
 
 
-    private void formatCardUrlIntent(TextView textView, String text){
+    private void formatCardUrlIntent(TextView textView, String text, boolean listenerOnParent){
 
         String textContent = "";
 
@@ -104,7 +104,15 @@ public class AboutActivity extends Activity {
             textContent += text.substring(0, lastUrl);
 
             final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url.toString()));
-            ((ViewGroup)textView.getParent().getParent()).setOnClickListener(new View.OnClickListener() {
+
+            View viewListener;
+            if(listenerOnParent){
+                viewListener = ((ViewGroup)textView.getParent().getParent());
+            } else {
+                viewListener = textView;
+            }
+
+            viewListener.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     startActivity(browserIntent);
