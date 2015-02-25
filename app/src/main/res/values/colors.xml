@@ -13,4 +13,6 @@
 
     <color name="lightBackground">#eeeeee</color>
 
+    <color name="separator">#44000000</color>
+
 </resources>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/icon_about"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_cat_alone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon_about"
+        android:id="@+id/developedby_title"
+        android:layout_centerHorizontal="true"
+        android:text="@string/developed_by" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/developedby_title"
+        android:id="@+id/me_textview"
+        android:text="@string/about_me"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/text_title"
+        android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/me_textview"
+        android:id="@+id/thanksto"
+        android:text="@string/thanks_to"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/thanksto"
+        android:id="@+id/thankstoname"
+        android:text="@string/thanks_to_name"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/text_subtitle"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"/>
+
+    <View
+        android:layout_width="@dimen/seperator_width"
+        android:layout_height="2dp"
+        android:layout_below="@+id/thankstoname"
+        android:id="@+id/separator"
+        android:background="@color/separator"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin_small"
+        android:layout_marginRight="@dimen/activity_horizontal_margin_small"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_small"
+        android:layout_marginTop="@dimen/activity_vertical_margin_small"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/using_title"
+        android:text="@string/using"
+        android:textSize="@dimen/text_subtitle"
+        android:textAllCaps="true"
+        android:layout_below="@+id/separator"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_alignLeft="@+id/me_textview"
+        android:layout_alignStart="@+id/me_textview" />
+
+
+
+</RelativeLayout>

@@ -2,9 +2,12 @@ package fr.xjet.tweetyhunting;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by Hugo on 19/02/2015.
@@ -13,6 +16,13 @@ public class TweetyHuntingApplication extends Application {
 
     // Google Analytics Property ID (tracking code)
     private static final String PROPERTY_ID = "UA-59957915-1";
+
+    @Override
+    public void onCreate(){
+
+        Fabric.with(this, new Crashlytics());
+
+    }
 
     /**
      * Send screen name tracking
