@@ -26,6 +26,9 @@ public class AboutActivity extends Activity {
 
     private ListView mListView;
     private TextView mMeTextView;
+    private TextView mDevelopedbyTitleTextView;
+    private TextView mThankstonameTextView;
+    private TextView mThankstoTextView;
 
 
     private Typeface mRobotoRegular;
@@ -54,11 +57,20 @@ public class AboutActivity extends Activity {
 
         ((TextView)headerListView.findViewById(R.id.using_title)).setTypeface(mRobotoCondensedBold);
         mMeTextView = ((TextView)headerListView.findViewById(R.id.me_textview));
+        mDevelopedbyTitleTextView = (TextView)headerListView.findViewById(R.id.developedby_title);
+        mThankstoTextView = (TextView)headerListView.findViewById(R.id.thanksto);
+        mThankstonameTextView = (TextView)headerListView.findViewById(R.id.thankstoname);
+
+        mDevelopedbyTitleTextView.setTypeface(mRobotoRegular);
+        mThankstoTextView.setTypeface(mRobotoRegular);
+        mThankstonameTextView.setTypeface(mRobotoRegular);
         mMeTextView.setTypeface(mRobotoBold);
         formatCardUrlIntent(mMeTextView, mMeTextView.getText().toString(), false);
 
         mListView.addHeaderView(headerListView);
         mListView.setAdapter(adapter);
+
+
 
     }
 
@@ -80,7 +92,7 @@ public class AboutActivity extends Activity {
             View rowView = inflater.inflate(R.layout.list_about, parent, false);
             TextView textView = (TextView) rowView.findViewById(R.id.lib_textview);
 
-            textView.setTypeface(mRobotoBold);
+            textView.setTypeface(mRobotoRegular);
 
             formatCardUrlIntent(textView, values[position], true);
 
