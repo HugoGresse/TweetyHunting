@@ -222,9 +222,10 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
                 }
 
                 @Override
-                public void onFail() {
+                public void onFail(int errorCode) {
+                    Log.d(LOG_TAG, "onFail");
                     mStateButtonManager.hideLoader();
-                    // Manage in TwitterManager
+                    // Managed in TwitterManager
                 }
             });
         } else {

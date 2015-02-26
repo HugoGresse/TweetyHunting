@@ -87,8 +87,28 @@ public class TwitterManager {
                 }
 
                 @Override
-                public void onFail() {
-                    disconnectTwitter();
+                public void onFail(int errorCode) {
+                    // invalid credentials
+                    if(errorCode == 89){
+                        Toast.makeText(mContext, mContext.getString(R.string.invalid_credentials), Toast.LENGTH_SHORT).show();
+                        disconnectTwitter();
+                    } else if(errorCode == -1) {
+                        // cannot resolve host
+                        Toast.makeText(
+                                mContext,
+                                mContext.getString(R.string.msg_error_network) ,
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    } else {
+                        // others
+                        Toast.makeText(
+                                mContext,
+                                mContext.getString(R.string.unknown_error) + " code:" + Integer.toString(errorCode) ,
+                                Toast.LENGTH_SHORT)
+                                .show();
+                    }
+
+                    listener.onFail(errorCode);
                 }
             });
 

@@ -5,12 +5,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.Pair;
-import android.widget.Toast;
 
 import fr.xjet.tweetyhunting.Cat;
 import fr.xjet.tweetyhunting.Constant;
 import fr.xjet.tweetyhunting.ImageUtils;
-import fr.xjet.tweetyhunting.R;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -93,18 +91,7 @@ public class TwitterUpdateTask extends AsyncTask<Pair<String, Cat>, String, Stri
         // TODO : dismiss loader
 
         if(exception != null){
-            // invalid credentials
-            if(exception.getErrorCode() == 89){
-                Toast.makeText(mContext, mContext.getString(R.string.invalid_credentials), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(
-                        mContext,
-                        mContext.getString(R.string.unknown_error) + " code:" + Integer.toString(exception.getErrorCode()) ,
-                        Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-            mListener.onFail();
+            mListener.onFail(exception.getErrorCode());
         } else {
             mListener.onSuccess();
         }
@@ -113,6 +100,6 @@ public class TwitterUpdateTask extends AsyncTask<Pair<String, Cat>, String, Stri
 
     public interface OnUpdateTwitter {
         public void onSuccess();
-        public void onFail();
+        public void onFail(int errorCode);
     }
 }
