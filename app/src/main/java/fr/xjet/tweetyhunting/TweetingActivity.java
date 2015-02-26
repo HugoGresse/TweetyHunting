@@ -218,6 +218,12 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
                 public void onSuccess() {
                     mTweetEditText.setText("");
                     mStateButtonManager.hideLoader();
+
+                    Toast.makeText(
+                            TweetingActivity.this,
+                            getString(R.string.twitter_imageshared),
+                            Toast.LENGTH_SHORT).show();
+
                     slideOutView(mCardView);
                 }
 
@@ -347,6 +353,12 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
 
         if(!mCurrentCat.isEmpty() && mRequestTweetCat){
             requestTweetCat();
+        } else {
+
+            Toast.makeText(
+                    TweetingActivity.this,
+                    getString(R.string.twitter_logedin),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -354,6 +366,10 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     public void onDisconnect() {
         Log.d(LOG_TAG, "onDisconnect");
 
+        Toast.makeText(
+                TweetingActivity.this,
+                getString(R.string.twitter_logedout),
+                Toast.LENGTH_SHORT).show();
 
         mTwitterMenuItem.setTitle(getString(R.string.action_tw_login));
     }
