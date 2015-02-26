@@ -270,6 +270,7 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     public void catFetchFailed(NetworkError e) {
 
         mSwipeRefreshLayout.setRefreshing(false);
+        LoaderManager.hideLoader();
 
         switch (e){
             case APIFAIL:
