@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hint_tweet">Le tweet</string>
+
+    <string name="action_about">À propos</string>
+    <string name="action_tw_logout">Déconnection de Twitter</string>
+    <string name="action_tw_login">Connexion à Twitter</string>
+
+    <string name="msg_error">Errur lors du chargement de l\'image, essaye encore ! </string>
+    <string name="msg_error_network">Pas de connexion Internet</string>
+    <string name="msg_error_api">Impossible de communiquer avec thecatapi.com</string>
+    <string name="msg_nocat">Pas de chat à tweeter !</string>
+    <string name="dialog_share">Partage l\'image sur</string>
+
+    <string name="invalid_credentials">Impossible de se connecter à ton compte Twitter. Essaye de ré-autorisé l\'app.</string>
+    <string name="unknown_error">Erreur chelou…</string>
+
+
+    <string name="twitter_requestacess">Autorise %1$s à poster sur Tweeter</string>
+    <string name="twitter_requestacess_fail">Échec lors de l\'autorisation de l\'application sur twitter</string>
+    <string name="twitter_requestacess_fail_accesstoken">Échec lors de l\'autorisation de l\'application sur twitter (wrong access token)</string>
+    <string name="twitter_logedin">Connecté</string>
+    <string name="twitter_logedout">Déconnecté</string>
+    <string name="twitter_sharingimage">Tweet en cours…</string>
+    <string name="twitter_imageshared">Image partagé ! </string>
+
+    <string name="developed_by">Réalisé avec amour par</string>
+    <string name="about_me">Hugo Gresse https://twitter.com/HugoGresse</string>
+    <string name="thanks_to">Avec l\'aide de</string>
+    <string name="thanks_to_name">Lauriane Anthony et Antoine Rousseau</string>
+
+</resources>
