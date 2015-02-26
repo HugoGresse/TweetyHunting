@@ -4,6 +4,12 @@
     <string name="app_name">TweetyHunting</string>
     <string name="tweet_sufix">#tweetyhunting</string>
 
+    <!-- Google Analytics events -->
+    <string name="tracker_tweetingactivity">TweetingActivity</string>
+    <string name="tracker_tweetingactivity_getcat">Get Cat</string>
+    <string name="tracker_tweetingactivity_tweet">Tweet</string>
+
+
     <string name="hint_tweet">The tweet message</string>
 
     <string name="action_about">About</string>
@@ -28,11 +34,6 @@
     <string name="twitter_logedout">Logged out</string>
     <string name="twitter_sharingimage">Sharing image…</string>
     <string name="twitter_imageshared">Image shared!</string>
-
-
-    <string name="tracker_tweetingactivity">TweetingActivity</string>
-    <string name="tracker_tweetingactivity_getcat">Get Cat</string>
-    <string name="tracker_tweetingactivity_tweet">Tweet</string>
 
     <string name="developed_by">Made with love by</string>
     <string name="about_me">Hugo Gresse https://twitter.com/HugoGresse</string>
