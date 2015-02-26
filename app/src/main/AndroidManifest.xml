@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_tweetyhunting"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Tweethunting"
+        android:theme="@style/Theme.Tweetyhunting"
         android:hardwareAccelerated="true">
         <activity
             android:name=".TweetingActivity"
@@ -30,7 +30,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="oauth" android:host="tweethunting"/>
+                <data android:scheme="oauth" android:host="tweetyhunting"/>
             </intent-filter>
 
         </activity>
