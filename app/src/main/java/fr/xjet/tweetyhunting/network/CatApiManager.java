@@ -78,9 +78,9 @@ public class CatApiManager implements CatDownloadListener {
                     Log.e(LOG, "error while getting cat from api : " + error.toString());
 
                     if(error.getKind() == RetrofitError.Kind.NETWORK){
-                        mListener.catFetchFailed(NetworkListener.NetworkError.APIFAIL);
-                    } else {
                         mListener.catFetchFailed(NetworkListener.NetworkError.NETWORKFAIL);
+                    } else {
+                        mListener.catFetchFailed(NetworkListener.NetworkError.APIFAIL);
                     }
 
                 }
