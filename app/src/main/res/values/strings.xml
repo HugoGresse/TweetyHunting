@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string name="app_name" translatable="false">TweetyHunting</string>
+    <string name="app_name" translatable="false">Tweety Hunting</string>
     <string name="tweet_sufix" translatable="false">#tweetyhunting</string>
 
     <!-- Google Analytics events -->
@@ -42,6 +42,7 @@
 
     <string name="using"  translatable="false">Third-party libraries</string>
     <string-array name="about_libraries"  translatable="false">
+        <item>The Cat API by Aden Forshaw http://thecatapi.com/</item>
         <item>Retrofit and Okhttp by Square Up http://square.github.io/retrofit/</item>
         <item>Twitter4j http://twitter4j.org</item>
         <item tools:ignore="TypographyDashes">Android Gif Drawable by Karol Wrótniak https://github.com/koral--/android-gif-drawable/</item>

@@ -5,12 +5,12 @@
     <dimen name="activity_horizontal_margin_small">8dp</dimen>
     <dimen name="activity_vertical_margin_small">8dp</dimen>
 
-    <dimen name="image_min_height">200dp</dimen>
+    <dimen name="image_min_height">400dp</dimen>
 
     <dimen name="card_round">2dp</dimen>
     <dimen name="card_gutter">8dp</dimen>
     <dimen name="card_content_padding">16dp</dimen>
-    <dimen name="card_shadow">8dp</dimen>
+    <dimen name="card_shadow">2dp</dimen>
 
     <dimen name="button_margin">-28dp</dimen>
     <dimen name="button_marginright">8dp</dimen>
