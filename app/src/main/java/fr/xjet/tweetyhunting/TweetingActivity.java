@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonFloat;
@@ -55,7 +56,9 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     private CardView                                mCardView;
     private StateButtonManager                      mStateButtonManager;
     private ButtonFloat                             mShareButton;
+    private ViewGroup                               mStateButtonLayout;
     private CustomProgressBarCircularIndeterminate  mShareButtonLoader;
+    private LinearLayout                            mEditTextLayout;
     private MaterialEditText                        mTweetEditText;
     private MenuItem                                mTwitterMenuItem;
     private boolean                                 mRequestTweetCat;
@@ -78,10 +81,12 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
         mImageView = (GifImageView) findViewById(R.id.catImageView);
         mLoader = (CustomProgressBarCircularIndeterminate) findViewById(R.id.progressBar);
         mShareButton = (ButtonFloat) findViewById(R.id.shareButton);
+        mStateButtonLayout = (ViewGroup) findViewById(R.id.stateButton);
         mShareButtonLoader = (CustomProgressBarCircularIndeterminate) findViewById(R.id.stateButtonLoader);
         mCardView = (CardView) findViewById(R.id.tweet_card);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mTweetEditText = (MaterialEditText) findViewById(R.id.tweetEditText);
+        mEditTextLayout = (LinearLayout) findViewById(R.id.editTextLayout);
 
         mTweetEditText.setMaxCharacters(140 - getString(R.string.tweet_sufix).length() -2);
 
@@ -100,7 +105,7 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
             public void onClick(View view) {
 
                 // close keyboard
-                InputMethodManager imm = (InputMethodManager)getSystemService(
+                InputMethodManager imm = (InputMethodManager) getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(mTweetEditText.getWindowToken(), 0);
 
@@ -170,6 +175,18 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateImageViewHeight(){
+
+        int height = mSwipeRefreshLayout.getHeight() - mEditTextLayout.getHeight();
+
+        height -= ((ViewGroup.MarginLayoutParams)mCardView.getLayoutParams()).topMargin +
+                ((ViewGroup.MarginLayoutParams)mCardView.getLayoutParams()).bottomMargin;
+
+        height -= mStateButtonLayout.getHeight() + ((ViewGroup.MarginLayoutParams)mStateButtonLayout.getLayoutParams()).topMargin;
+
+        mImageView.getLayoutParams().height = height;
     }
 
     private void getACat(){
@@ -245,7 +262,6 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     @Override
     public void catReceived(Cat cat) {
         Log.d(LOG_TAG, "final cat : " + cat.getUrl());
-
         mSwipeRefreshLayout.setRefreshing(false);
 
         if(cat.getImageData() != null){
@@ -258,7 +274,10 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
                 gifFromStream = new GifDrawable(cat.getImageData());
                 mImageView.setImageDrawable(gifFromStream);
 
+
                 mImageView.getLayoutParams().width = ((ViewGroup)mImageView.getParent()).getWidth();
+
+                updateImageViewHeight();
 
             } catch (IOException e) {
                 e.printStackTrace();
