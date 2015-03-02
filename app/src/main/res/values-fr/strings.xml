@@ -3,7 +3,7 @@
     <string name="hint_tweet">Le tweet</string>
 
     <string name="action_about">À propos</string>
-    <string name="action_tw_logout">Déconnection de Twitter</string>
+    <string name="action_tw_logout">Déconnexion de Twitter</string>
     <string name="action_tw_login">Connexion à Twitter</string>
 
     <string name="msg_error">Errur lors du chargement de l\'image, essaye encore ! </string>
