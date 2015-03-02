@@ -32,3 +32,6 @@ proguard/
 
 # Log Files
 *.log
+
+app/src/main/res/values/credentials.xml
+app/crashlytics.properties
