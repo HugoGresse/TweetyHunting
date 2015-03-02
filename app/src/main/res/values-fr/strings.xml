@@ -6,13 +6,13 @@
     <string name="action_tw_logout">Déconnexion de Twitter</string>
     <string name="action_tw_login">Connexion à Twitter</string>
 
-    <string name="msg_error">Errur lors du chargement de l\'image, essaye encore ! </string>
+    <string name="msg_error">Erreur lors du chargement de l\'image, essaye encore ! </string>
     <string name="msg_error_network">Pas de connexion Internet</string>
     <string name="msg_error_api">Impossible de communiquer avec thecatapi.com</string>
     <string name="msg_nocat">Pas de chat à tweeter !</string>
     <string name="dialog_share">Partage l\'image sur</string>
 
-    <string name="invalid_credentials">Impossible de se connecter à ton compte Twitter. Essaye de ré-autorisé l\'app.</string>
+    <string name="invalid_credentials">Impossible de se connecter à ton compte Twitter. Essaye de ré-autoriser l\'app.</string>
     <string name="unknown_error">Erreur chelou…</string>
 
 
