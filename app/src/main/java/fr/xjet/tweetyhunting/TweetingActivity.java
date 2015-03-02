@@ -24,6 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonFloat;
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.okhttp.OkHttpClient;
 
@@ -44,6 +47,8 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
     private static final String LOG_TAG = "TweetingActivity";
 
     private static final int ANIMATION_DURATION = 5;
+
+    private String                                  mAdversitingId = "";
 
     private OkHttpClient                            mClient;
 
@@ -95,6 +100,7 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
 
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+        updateAdvertisingId();
         getACat();
 
         mTwitterManager = new TwitterManager(this.getApplicationContext(), this);
@@ -177,6 +183,27 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
         return super.onOptionsItemSelected(item);
     }
 
+    public void updateAdvertisingId() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AdvertisingIdClient.Info adInfo = null;
+                try {
+                    adInfo = AdvertisingIdClient.getAdvertisingIdInfo(TweetingActivity.this);
+
+                } catch (IOException | GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException exception) {
+                    // Unrecoverable error connecting to Google Play services (e.g.,
+                    // the old version of the service doesn't support getting AdvertisingId).
+
+                }
+                if (adInfo != null) {
+                    mAdversitingId = adInfo.getId();
+                }
+            }
+        });
+    }
+
     private void updateImageViewHeight(){
 
         int height = mSwipeRefreshLayout.getHeight() - mEditTextLayout.getHeight();
@@ -221,12 +248,6 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
             mStateButtonManager.showLoader();
             mRequestTweetCat = false;
 
-            // send tracking event
-            ((TweetyHuntingApplication)getApplication()).sendEventTracking(
-                    R.string.tracker_tweetingactivity,
-                    R.string.tracker_tweetingactivity_tweet,
-                    "");
-
             String tweetText =
                     mTweetEditText.getText().toString() +
                     " " +
@@ -235,6 +256,13 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
             mTwitterManager.shareTweet(new Pair<>(tweetText, mCurrentCat), new TwitterUpdateTask.OnUpdateTwitter() {
                 @Override
                 public void onSuccess() {
+
+                    // send tracking event
+                    ((TweetyHuntingApplication)getApplication()).sendEventTracking(
+                            R.string.tracker_tweetingactivity,
+                            R.string.tracker_tweetingactivity_tweet,
+                            mAdversitingId);
+
                     mTweetEditText.setText("");
                     mStateButtonManager.hideLoader();
 
