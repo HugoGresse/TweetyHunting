@@ -283,6 +283,11 @@ public class TwitterManager {
 
         @Override
         protected AccessToken doInBackground(Void... voidParam) {
+
+            if(mVerifier == null || mVerifier.isEmpty() || mRequestToken == null){
+                return null;
+            }
+
             try {
                 return twitter.getOAuthAccessToken(mRequestToken, mVerifier);
             } catch (TwitterException e) {

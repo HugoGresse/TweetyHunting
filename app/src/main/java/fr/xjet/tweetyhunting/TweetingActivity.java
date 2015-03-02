@@ -124,14 +124,14 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
                 intent.getData() != null &&
                 intent.getData().toString().startsWith(Constant.CALLBACK_URL) ){
 
-            Log.d(LOG_TAG,"Coming from browser, last image : " + mCurrentCat.getUrl());
+            // maybe handle intent if callbacked from Twitter
+            mTwitterManager.handleOAuthCallback(intent);
+
             if(mRequestTweetCat){
                 Toast.makeText(this, getString(R.string.twitter_sharingimage), Toast.LENGTH_SHORT).show();
             }
         }
 
-        // maybe handle intent if callbacked from Twitter
-        mTwitterManager.handleOAuthCallback(intent);
         /**
          * see {@link #onConnect()}
          */
