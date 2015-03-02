@@ -186,6 +186,8 @@ public class TweetingActivity extends ActionBarActivity implements NetworkListen
 
         height -= mStateButtonLayout.getHeight() + ((ViewGroup.MarginLayoutParams)mStateButtonLayout.getLayoutParams()).topMargin;
 
+        height -= 20;
+
         mImageView.getLayoutParams().height = height;
     }
 
