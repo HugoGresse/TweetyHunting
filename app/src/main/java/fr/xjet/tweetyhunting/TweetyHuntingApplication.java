@@ -15,13 +15,14 @@ import io.fabric.sdk.android.Fabric;
 public class TweetyHuntingApplication extends Application {
 
     // Google Analytics Property ID (tracking code)
-    private static final String PROPERTY_ID = "";
+    private static String mPropertyId = "";
 
     @Override
     public void onCreate(){
 
         Fabric.with(this, new Crashlytics());
 
+        mPropertyId = getString(R.string.ga_property_id);
     }
 
     /**
@@ -30,7 +31,7 @@ public class TweetyHuntingApplication extends Application {
      */
     public void sendScreenTracking(String screenName){
         // Get tracker.
-        Tracker t = GoogleAnalytics.getInstance(this).newTracker(PROPERTY_ID);
+        Tracker t = GoogleAnalytics.getInstance(this).newTracker(mPropertyId);
 
         // Set screen name.
         // Where path is a String representing the screen name.
@@ -42,7 +43,7 @@ public class TweetyHuntingApplication extends Application {
 
     public void sendEventTracking(int categoryId, int actionId, String label) {
         // Get tracker.
-        Tracker t = GoogleAnalytics.getInstance(this).newTracker(PROPERTY_ID);
+        Tracker t = GoogleAnalytics.getInstance(this).newTracker(mPropertyId);
 
         // Build and send an Event.
         t.send(new HitBuilders.EventBuilder()
