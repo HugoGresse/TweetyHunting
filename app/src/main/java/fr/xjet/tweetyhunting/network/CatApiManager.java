@@ -127,14 +127,12 @@ public class CatApiManager implements CatDownloadListener {
                 }
             }
 
-            if(responseImageData != null){
-                try {
-                    return responseImageData.body().bytes();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            } else {
+            try {
+                return responseImageData.body().bytes();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            } catch (NullPointerException e){
                 return null;
             }
         }
