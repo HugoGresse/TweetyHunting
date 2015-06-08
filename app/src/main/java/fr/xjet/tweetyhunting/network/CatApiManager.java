@@ -115,7 +115,7 @@ public class CatApiManager implements CatDownloadListener {
             com.squareup.okhttp.Response responseImageData = null;
             try {
                 responseImageData = mClient.newCall(requestImageData).execute();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             if (responseImageData != null) {
